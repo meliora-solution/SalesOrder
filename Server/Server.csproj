@@ -7,7 +7,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Folder Include="ServiceLayer\" />
+		<Folder Include="ServiceLayer\OrderService\" />
+		<Folder Include="ServiceLayer\SupplierService\" />
+		<Folder Include="ServiceLayer\ProductService\" />
 	</ItemGroup>
 
 	<ItemGroup>

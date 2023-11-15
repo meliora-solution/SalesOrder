@@ -1,0 +1,53 @@
+﻿@page "/customerlist"
+@using Server.ServiceLayer.CustomerService;
+@using Server.ServiceLayer.CustomerService.Concrete;
+@using global::DataLayer.Entity;
+
+<PageTitle>Customer List</PageTitle>
+
+@inject CustomerServices _customerServices
+<FluentHeader Style="background-color:none">
+    <h3>Customer</h3>
+    <FluentSpacer />
+  </FluentHeader>
+
+
+@if (IsLoading == true)
+{
+    <div style="width: 300px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+@if (customers != null)
+{
+    <Stock.Component.NameFilter OnFilter="FilterNames" />
+
+    <FluentDataGrid Items="@customers" ResizableColumns=true GridTemplateColumns="0.1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
+                    style="height: 580px;overflow:auto;">
+
+        <PropertyColumn Property="@(c => c.Id)" Title="Id" Align="Align.Start" Sortable="true" />
+        <PropertyColumn Property="@(c => c.FirstName)" Title="First Name" Align="Align.Start" Sortable="true" />
+        <PropertyColumn Property="@(c => c.LastName)" Title="Last Name" Align="Align.Start" Sortable="true" />
+        <PropertyColumn Property="@(c => c.Phone)" Title="Phone" Align="Align.Start" />
+        <PropertyColumn Property="@(c => c.City)" Title="City" Align="Align.Start" />
+        <PropertyColumn Property="@(c => c.Country)" Title="Country" Align="Align.Start" />
+      
+
+     </FluentDataGrid>
+}
+@code {
+    private bool IsLoading { get; set; } = false;
+    IQueryable<CustomerDto>? customers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitialized();
+         IsLoading = true;
+        //  await Task.Delay(200);
+        customers = (await _customerServices.GetEFCustomerListAsycn()).AsQueryable();
+       
+        IsLoading = false;
+    }
+  
+
+}

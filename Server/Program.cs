@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
 using Server.Data;
 using Server.DataLayer.Context;
+using Server.ServiceLayer.CustomerService.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<soContext>(options =>
@@ -18,6 +19,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddFluentUIComponents();
 
+builder.Services.AddScoped<CustomerServices>();
 
 var app = builder.Build();
 
