@@ -9,6 +9,13 @@ namespace Server.DataLayer.Context
         public soContext(DbContextOptions<soContext> options) : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("server=DESKMINI\\MSSQLDEV;database=SampleDB;trusted_connection=true");
+            }
+        }
 
         /*  
         When you declare a property as virtual in an Entity Framework Core entity class, 
@@ -19,13 +26,16 @@ namespace Server.DataLayer.Context
         public virtual DbSet<Customer> Customer{ get; set; } = null!;
         
         ServiceLayer.EF needs DBSet but ServiceLayer.Dapper does not need them.
-         */
-        public DbSet<Customer> Customer { get; set; } = null!;
-        public DbSet<Supplier> Supplier { get; set; } = null!;
-        public DbSet<Order> Order { get; set; } = null!;
-        public DbSet<OrderItem> OrderItem { get; set; } = null!;
-        public DbSet<Product> Product { get; set; } = null!;
-    }
 
+         */
+
+        public virtual DbSet<Customer>? Customer { get; set; } 
+        public DbSet<Supplier> Supplier { get; set; } 
+        public DbSet<Order> Order { get; set; } 
+        public DbSet<OrderItem> OrderItem { get; set; } 
+        public DbSet<Product> Product { get; set; } 
+    }
     
-}
+ }
+    
+

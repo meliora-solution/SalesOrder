@@ -1,0 +1,145 @@
+﻿@page "/CreateCustomerDap"
+@using ServiceLayer.Dapper.CustomerService;
+@using ServiceLayer.Dapper.CustomerService.Concrete;
+
+<PageTitle>CreateCustomer</PageTitle>
+@inject CustomerServices _customerServices
+
+@inject IJSRuntime jsruntime
+@inject IDialogService _dialogService
+
+@if (IsLoading == true)
+{
+    <div style="width: 300px; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+
+<FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Neutral" Slot="start" OnClick="GoBack" />
+
+  <div style="padding: 1.5rem;">
+    <FluentLabel Typo="Typography.Header"> Buat Record Baru </FluentLabel>
+    <br />
+
+    <EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
+        <DataAnnotationsValidator />
+        <FluentValidationSummary />
+        <FluentStack Orientation="Orientation.Vertical">
+            <FluentGrid Spacing="0">
+                <FluentGridItem xs="6">
+                    <FluentGrid>
+                        <FluentGridItem xs="6">
+                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.FirstName" Placeholder="First Name"></FluentTextField>
+                        </FluentGridItem>
+                    </FluentGrid>
+                    <FluentGrid>
+                        <FluentGridItem xs="6">
+                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.LastName" Placeholder="Last Name"></FluentTextField>
+                        </FluentGridItem>
+                    </FluentGrid>
+
+                    <FluentGrid>
+                        <FluentGridItem xs="6">
+                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.Phone" Placeholder="Phone"></FluentTextField>
+                        </FluentGridItem>
+                    </FluentGrid>
+
+               
+                    <FluentGrid>
+                        <FluentGridItem xs="6">
+                           
+                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.City" Placeholder="City"></FluentTextField>
+                        </FluentGridItem>
+                    </FluentGrid>
+
+                    <FluentGrid>
+                        <FluentGridItem xs="6">
+                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.Country" Placeholder="Country"></FluentTextField>
+
+                        </FluentGridItem>
+                    </FluentGrid>
+                </FluentGridItem>
+            </FluentGrid>
+        </FluentStack>
+        <br />
+        <FluentGrid Spacing="3" Justify="@Justification">
+            <FluentGridItem xs="12" sm="6">
+                <FluentButton Type="ButtonType.Submit" Appearance="Appearance.Accent">Submit</FluentButton>
+            </FluentGridItem>
+
+        </FluentGrid>
+    </EditForm>
+
+  </div>
+@code {
+    private bool IsLoading { get; set; } = false;
+    public CustomerDto model { get; set; } = new();
+
+
+
+    JustifyContent Justification = JustifyContent.FlexStart;
+    protected override async Task OnInitializedAsync()
+    {
+
+        base.OnInitialized();
+        init();
+
+
+    }
+
+    private async void init()
+    {
+        model = new CustomerDto();
+    }
+
+
+    private async Task GoBack()
+    {
+        await jsruntime.InvokeVoidAsync("history.back");
+    }
+
+    private async void OnValidSubmit()
+    {
+
+
+
+
+        try
+        {
+            IsLoading = true;
+
+            CustomerDto a = new CustomerDto()
+                {
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Phone = model.Phone,
+                    City = model.City,
+                    Country = model.Country
+
+                };
+            //ServiceResponseDTO<bool> result = new();
+            var result = await _customerServices.UpsertCustomerAsync (a);
+            IsLoading = false;
+            // berikan pesan
+
+            if (result == true)
+            {
+                _dialogService.ShowInfo("Data disimpan", "Save");
+            }
+            else
+            {
+                _dialogService.ShowWarning("Data tidak bisa disimpan", "Save");
+            }
+            init();
+
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            string msg = ex.Message;
+            IsLoading = false;
+            return;
+        }
+    }
+
+}

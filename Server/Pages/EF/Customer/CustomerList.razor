@@ -6,11 +6,12 @@
 
 <PageTitle>Customer List</PageTitle>
 
-@inject CustomerServices _customerServices
+@inject EFCustomerServices _customerServices
+
 <FluentHeader Style="background-color:none">
     <h3>Customer List Entity Framewok</h3>
     <FluentSpacer />
-  </FluentHeader>
+</FluentHeader>
 
 
 @if (IsLoading == true)
@@ -21,7 +22,7 @@
 }
 @if (customers != null)
 {
-  
+
     <FluentDataGrid Items="@customers" ResizableColumns=true GridTemplateColumns="0.1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
                     style="height: 580px;overflow:auto;">
 
@@ -31,9 +32,9 @@
         <PropertyColumn Property="@(c => c.Phone)" Title="Phone" Align="Align.Start" />
         <PropertyColumn Property="@(c => c.City)" Title="City" Align="Align.Start" />
         <PropertyColumn Property="@(c => c.Country)" Title="Country" Align="Align.Start" />
-      
 
-     </FluentDataGrid>
+
+    </FluentDataGrid>
 }
 @code {
     private bool IsLoading { get; set; } = false;
@@ -42,12 +43,22 @@
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-         IsLoading = true;
-    
-        customers = (await _customerServices.GetCustomerListAsync()).AsQueryable();
-       
-        IsLoading = false;
+
+        try
+        {
+            IsLoading = true;
+        //    Task.Delay(100);
+            customers = (await _customerServices.GetEFCustomerListAsync()).AsQueryable();
+
+            IsLoading = false;
+        }
+        catch (Exception ex)
+        {
+            string msg = ex.Message;
+            IsLoading = false;
+        }
+
     }
-  
+
 
 }

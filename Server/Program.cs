@@ -3,6 +3,7 @@ using Microsoft.Fast.Components.FluentUI;
 using Server.Data;
 using Server.DataLayer.Context;
 using ServiceLayer.Dapper.Extentions;
+using ServiceLayer.EF.CustomerService.Concrete;
 using ServiceLayer.EF.Extentions;
 
 //using ServiceLayer.Dapper.Extentions;
@@ -23,9 +24,10 @@ builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddFluentUIComponents();
 
 // Register Services
+// builder.Services.AddEFService();
 
+builder.Services.AddScoped<EFCustomerServices>();
 builder.Services.AddDapperService();
-builder.Services.AddEFService();
 
 
 var app = builder.Build();

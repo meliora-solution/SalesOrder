@@ -51,8 +51,35 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
             }
 
         }
+        public async Task<bool> UpsertCustomerAsync(CustomerDto objdto)
+        {
+            try
+            {
+                var sql = @" MERGE INTO Customer  as t Using  (VALUES 
+                    (@FirstName,@LastName,@City,@Country,@Phone))
+                    as s (d1,d2,d3,d4,d5)
+                    on t.FirstName = s.d1 and t.LastName=s.d2  
+                    when matched then
+                     update set FirstName=s.d1,LastName=s.d2,City=s.d3,Country=s.d4,Phone=s.d5
+                     WHEN NOT MATCHED BY TARGET THEN  
+                    Insert (FirstName,LastName,City,Country,Phone)
+                    Values (s.d1,s.d2,s.d3,s.d4,s.d5);";
 
-   
+                using (IDbConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
+                {
+                    var query = await connection.QueryAsync<string>(sql, objdto);
+                }
+                  
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return false;
+            }
+        }
+
+    
 
 
     }

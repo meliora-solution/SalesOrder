@@ -7,7 +7,7 @@ namespace ServiceLayer.EF.Extentions
     {
         public static void AddEFService(this IServiceCollection services)
         {
-            services.AddScoped<CustomerServices>();
+            services.AddScoped<EFCustomerServices>();
         }
     }
 
