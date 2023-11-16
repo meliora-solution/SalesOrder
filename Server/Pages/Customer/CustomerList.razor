@@ -1,4 +1,4 @@
-﻿@page "/customerlistDap"
+﻿@page "/customerlist"
 
 @using ServiceLayer.Dapper.CustomerService.Concrete;
 @using ServiceLayer.Dapper.CustomerService;
@@ -7,9 +7,14 @@
 <PageTitle>Customer List</PageTitle>
 
 @inject CustomerServices _customerServices
+@inject NavigationManager _navman
+@inject IDialogService _dialogService
+
+
 <FluentHeader Style="background-color:none">
-    <h3>Customer List Dapper</h3>
+    <h3>Customer List</h3>
     <FluentSpacer />
+    <FluentButton OnClick="@(() => GetLink())" Appearance="Appearance.Accent">New</FluentButton>
   </FluentHeader>
 
 
@@ -31,23 +36,83 @@
         <PropertyColumn Property="@(c => c.Phone)" Title="Phone" Align="Align.Start" />
         <PropertyColumn Property="@(c => c.City)" Title="City" Align="Align.Start" />
         <PropertyColumn Property="@(c => c.Country)" Title="Country" Align="Align.Start" />
-      
+
+        <TemplateColumn Title="Actions">
+            <FluentButton IconStart="@(new Icons.Regular.Size20.Edit())" BackgroundColor="var(--highlight-bg)" Color="var(--error)" Appearance="Appearance.Filled" Title="Edit" OnClick="@(() => Edit(context.Id))" />
+            <FluentButton IconStart="@(new Icons.Regular.Size20.Delete())" Appearance="Appearance.Filled" BackgroundColor="#ff531a" Color="var(--danger)" Title="Hapus" OnClick="@(() => Delete(context.Id))" />
+        </TemplateColumn>
 
      </FluentDataGrid>
 }
 @code {
     private bool IsLoading { get; set; } = false;
     IQueryable<CustomerDto>? customers;
+    bool? canceled;
 
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-         IsLoading = true;
     
+
+        await Loading();
+
+     
+    }
+    private void GetLink()
+    {
+        _navman.NavigateTo("/CustomerCreate");
+    }
+    private async void Edit(int Id)
+    {
+        _navman.NavigateTo($"CustomerUpdate/{Id}");
+    }
+    private async Task Loading()
+    {
+        IsLoading = true;
+        //  await Task.Delay(200);
         customers = (await _customerServices.GetCustomerListAsync()).AsQueryable();
        
         IsLoading = false;
     }
-  
+    private async void Delete(int Id)
+    {
+        try
+        {
+            var dialog = await _dialogService.ShowConfirmationAsync("Are you sure you want to Delete?", "Ok", "No", "Delete Data");
+            var dlgresult = await dialog.Result;
 
+            canceled = dlgresult.Cancelled;
+
+            if (canceled == null || (canceled == true))
+            {
+                _dialogService.ShowInfo("Delete cancelled", "Delete");
+                return;
+            }
+
+            IsLoading = true;
+     
+            bool flg  = await _customerServices.DeleteAsync(Id);
+
+            IsLoading = false;
+
+            if (flg == true)
+            {
+                _dialogService.ShowInfo("Data dihapus", "Delete");
+            }
+            else
+            {
+                _dialogService.ShowWarning("Data tidak bisa dihapus", "Delete");
+            }
+           
+            await Loading();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            string msg = ex.Message;
+            IsLoading = false;
+            return;
+        }
+
+    }
 }

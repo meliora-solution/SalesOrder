@@ -1,4 +1,4 @@
-﻿@page "/CreateCustomerDap"
+﻿@page "/CustomerCreate"
 @using ServiceLayer.Dapper.CustomerService;
 @using ServiceLayer.Dapper.CustomerService.Concrete;
 
@@ -14,13 +14,15 @@
         <FluentProgress></FluentProgress>
     </div>
 }
+<FluentHeader Style="background-color:none">
+    <h3>Customer Create</h3>
+    <FluentSpacer />
+</FluentHeader>
 
 <FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Neutral" Slot="start" OnClick="GoBack" />
 
   <div style="padding: 1.5rem;">
-    <FluentLabel Typo="Typography.Header"> Buat Record Baru </FluentLabel>
-    <br />
-
+   
     <EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
         <DataAnnotationsValidator />
         <FluentValidationSummary />
@@ -28,34 +30,28 @@
             <FluentGrid Spacing="0">
                 <FluentGridItem xs="6">
                     <FluentGrid>
-                        <FluentGridItem xs="6">
-                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.FirstName" Placeholder="First Name"></FluentTextField>
+                          <FluentGridItem xs="6">
+                            <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="model.FirstName" >First Name</FluentTextField>
                         </FluentGridItem>
                     </FluentGrid>
                     <FluentGrid>
                         <FluentGridItem xs="6">
-                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.LastName" Placeholder="Last Name"></FluentTextField>
+                            <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="model.LastName" >Last Name</FluentTextField>
                         </FluentGridItem>
                     </FluentGrid>
-
                     <FluentGrid>
                         <FluentGridItem xs="6">
-                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.Phone" Placeholder="Phone"></FluentTextField>
+                            <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="model.Phone" >Phone</FluentTextField>
                         </FluentGridItem>
                     </FluentGrid>
-
-               
                     <FluentGrid>
                         <FluentGridItem xs="6">
-                           
-                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.City" Placeholder="City"></FluentTextField>
+                            <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="model.City" > City </FluentTextField>
                         </FluentGridItem>
                     </FluentGrid>
-
                     <FluentGrid>
                         <FluentGridItem xs="6">
-                            <FluentTextField Appearance="FluentInputAppearance.Filled" style="width: 100%;" @bind-Value="model.Country" Placeholder="Country"></FluentTextField>
-
+                            <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="model.Country" >Country</FluentTextField>
                         </FluentGridItem>
                     </FluentGrid>
                 </FluentGridItem>

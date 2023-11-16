@@ -11,6 +11,18 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
     {
         private readonly soContext _context;
 
+        /*
+         
+        The line public CustomerServices(soContext context) is the constructor of the CustomerServices class. In this constructor, 
+        a parameter of type soContext named context is defined. This constructor is used for dependency injection, as it takes an instance of 
+        soContext as a parameter, allowing the caller to provide the necessary dependency (in this case, the soContext instance) when creating 
+        an instance of the CustomerServices class.
+
+        Dependency injection is a design pattern where the dependencies of a class are injected from the outside rather than being created within the class. 
+        This promotes better separation of concerns and makes the class more testable and modular.
+         
+         */
+
         public CustomerServices(soContext context)
         {
             _context = context;
@@ -55,15 +67,22 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
         {
             try
             {
-                var sql = @" MERGE INTO Customer  as t Using  (VALUES 
-                    (@FirstName,@LastName,@City,@Country,@Phone))
-                    as s (d1,d2,d3,d4,d5)
-                    on t.FirstName = s.d1 and t.LastName=s.d2  
-                    when matched then
-                     update set FirstName=s.d1,LastName=s.d2,City=s.d3,Country=s.d4,Phone=s.d5
-                     WHEN NOT MATCHED BY TARGET THEN  
-                    Insert (FirstName,LastName,City,Country,Phone)
-                    Values (s.d1,s.d2,s.d3,s.d4,s.d5);";
+                var sql = @"
+                        MERGE INTO Customer AS target
+                        USING (VALUES 
+                            (@Id, @FirstName, @LastName, @City, @Country, @Phone)
+                        ) AS source (Id, d2, d3, d4, d5, d6)
+                        ON target.Id = source.Id
+                        WHEN MATCHED THEN
+                            UPDATE SET
+                                target.FirstName = source.d2,
+                                target.LastName = source.d3,
+                                target.City = source.d4,
+                                target.Country = source.d5,
+                                target.Phone = source.d6
+                        WHEN NOT MATCHED BY TARGET THEN
+                            INSERT (FirstName, LastName, City, Country, Phone)
+                            VALUES (source.d2, source.d3, source.d4, source.d5, source.d6);";
 
                 using (IDbConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
                 {
@@ -78,7 +97,48 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
                 return false;
             }
         }
+        public async Task<CustomerDto?> GetCustomerAsync(int Id)
+        {
+            try
+            {
+                string sql = "SELECT * FROM Customer WHERE Id = @Id";
 
+                using (IDbConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
+                {
+                    // Use QueryAsync<T> where T is the type you expect to retrieve
+                    var query = await connection.QueryAsync<CustomerDto>(sql, new { Id });
+                    var data = query.SingleOrDefault();
+                    return data;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception appropriately
+                return null;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int Id)
+        {
+            try
+            {
+                string sql = "DELETE FROM Customer WHERE Id = @Id";
+
+                using (IDbConnection connection = new SqlConnection(_context.Database.GetConnectionString()))
+                {
+                    // Use ExecuteAsync for non-query operations like delete
+                    var affectedRows = await connection.ExecuteAsync(sql, new { Id });
+
+                    // Check if any rows were affected
+                    return affectedRows > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log or handle the exception appropriately
+                return false;
+            }
+        }
 
 
 
