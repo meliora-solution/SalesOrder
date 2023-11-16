@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Server.DataLayer.Context;
 using System.Data;
 
-namespace Server.ServiceLayer.CustomerService.Concrete
+namespace ServiceLayer.Dapper.CustomerService.Concrete
 {
     public class CustomerServices
     {
@@ -16,6 +16,7 @@ namespace Server.ServiceLayer.CustomerService.Concrete
             _context = context;
         }
 
+        // Menggunakan Dapper
         public async Task<IEnumerable<CustomerDto>> GetCustomerListAsync()
         {
             string sql = "SELECT * FROM Customer ";
@@ -50,30 +51,8 @@ namespace Server.ServiceLayer.CustomerService.Concrete
             }
 
         }
-        public async Task<IEnumerable<CustomerDto>?> GetEFCustomerListAsycn()
-        {
-            try
-            {
-                var query = (from c in _context.Customer
-                             select new CustomerDto
-                             {
-                                 Id = c.Id,
-                                 FirstName = c.FirstName,
-                                 LastName = c.LastName,
-                                 City = c.City,
-                                 Country = c.Country,
-                                 Phone = c.Phone
-                             });
-                var data = await query.ToListAsync();
-                return data.AsQueryable();
 
-            }
-            catch (Exception ex)
-            {
-                string msg = ex.Message;
-                return null;
-            }
-        }
+   
 
 
     }

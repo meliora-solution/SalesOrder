@@ -1,10 +1,9 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Fast.Components.FluentUI;
 using Server.Data;
 using Server.DataLayer.Context;
-using Server.ServiceLayer.CustomerService.Concrete;
+using CustomerDapper = ServiceLayer.Dapper.CustomerService.Concrete;
+using CustomerEF = ServiceLayer.EF.CustomerService.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<soContext>(options =>
@@ -19,7 +18,8 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddFluentUIComponents();
 
-builder.Services.AddScoped<CustomerServices>();
+builder.Services.AddScoped<CustomerDapper.CustomerServices>();
+builder.Services.AddScoped<CustomerEF.CustomerServices>();
 
 var app = builder.Build();
 

@@ -1,6 +1,6 @@
-﻿namespace Server.ServiceLayer.CustomerService
+﻿namespace DataLayer.Entity
 {
-    public class CustomerDto
+    public class Customer
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

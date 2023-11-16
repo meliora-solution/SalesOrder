@@ -17,9 +17,10 @@ namespace Server.DataLayer.Context
         to optimize performance and minimize the amount of data loaded initially.
         
         public virtual DbSet<Customer> Customer{ get; set; } = null!;
-       
+        
+        ServiceLayer.EF needs DBSet but ServiceLayer.Dapper does not need them.
          */
-        public DbSet<Customer> Customer{ get; set; } = null!;
+        public DbSet<Customer> Customer { get; set; } = null!;
         public DbSet<Supplier> Supplier { get; set; } = null!;
         public DbSet<Order> Order { get; set; } = null!;
         public DbSet<OrderItem> OrderItem { get; set; } = null!;
