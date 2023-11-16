@@ -69,7 +69,7 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
                 {
                     var query = await connection.QueryAsync<string>(sql, objdto);
                 }
-                  
+
                 return true;
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
             }
         }
 
-    
+
 
 
     }

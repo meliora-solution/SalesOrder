@@ -16,7 +16,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Services.Dapper\ServiceLayer.Dapper.csproj" />
-	  <ProjectReference Include="..\Services.EF\ServiceLayer.EF.csproj" />
 	</ItemGroup>
 
 </Project>
