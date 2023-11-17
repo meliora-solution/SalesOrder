@@ -11,11 +11,6 @@
 @inject IDialogService _dialogService
 
 
-<FluentHeader Style="background-color:none">
-    <h3>Customer List</h3>
-    <FluentSpacer />
-    <FluentButton OnClick="@(() => GetLink())" Appearance="Appearance.Accent">New</FluentButton>
-  </FluentHeader>
 
 
 @if (IsLoading == true)
@@ -26,7 +21,12 @@
 }
 @if (customers != null)
 {
-  
+    <FluentHeader Style="background-color:none">
+        <h3>Customer List</h3>
+        <FluentSpacer />
+        <FluentButton OnClick="@(() => New())" Appearance="Appearance.Accent">New</FluentButton>
+    </FluentHeader>
+
     <FluentDataGrid Items="@customers" ResizableColumns=true GridTemplateColumns="0.1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
                     style="height: 580px;overflow:auto;">
 
@@ -47,6 +47,7 @@
 @code {
     private bool IsLoading { get; set; } = false;
     IQueryable<CustomerDto>? customers;
+
     bool? canceled;
 
     protected override async Task OnInitializedAsync()
@@ -58,7 +59,7 @@
 
      
     }
-    private void GetLink()
+    private void New()
     {
         _navman.NavigateTo("/CustomerCreate");
     }
@@ -69,9 +70,8 @@
     private async Task Loading()
     {
         IsLoading = true;
-        //  await Task.Delay(200);
-        customers = (await _customerServices.GetCustomerListAsync()).AsQueryable();
-       
+        customers = (await _customerServices.GetCustomerListAsync()).AsQueryable();      
+      
         IsLoading = false;
     }
     private async void Delete(int Id)

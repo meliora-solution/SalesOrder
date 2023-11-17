@@ -52,6 +52,7 @@ namespace ServiceLayer.Dapper.CustomerService.Concrete
                         Phone = customer.Phone
 
                     }).ToList();
+                  
 
                     return result.AsQueryable();
                 }

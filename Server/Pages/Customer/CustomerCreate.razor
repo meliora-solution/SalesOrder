@@ -14,13 +14,13 @@
         <FluentProgress></FluentProgress>
     </div>
 }
+
+
+<FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Neutral" Slot="start" OnClick="GoBack" />
 <FluentHeader Style="background-color:none">
     <h3>Customer Create</h3>
     <FluentSpacer />
 </FluentHeader>
-
-<FluentIcon Value="@(new Icons.Regular.Size16.ArrowLeft())" Color="Color.Neutral" Slot="start" OnClick="GoBack" />
-
   <div style="padding: 1.5rem;">
    
     <EditForm Model="@model" OnValidSubmit="@OnValidSubmit">
@@ -97,15 +97,13 @@
     private async void OnValidSubmit()
     {
 
-
-
-
         try
         {
             IsLoading = true;
 
             CustomerDto a = new CustomerDto()
                 {
+                    
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Phone = model.Phone,
