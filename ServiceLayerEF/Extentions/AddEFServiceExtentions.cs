@@ -3,9 +3,9 @@ using ServiceLayer.EF.CustomerService.Concrete;
 
 namespace ServiceLayerEF.Extentions
 {
-    public static class AddDapperServiceExtentions
+    public static class AddEFServiceExtentions
     {
-        public static void AddDapperService(this IServiceCollection services)
+        public static void AddEFService(this IServiceCollection services)
         {
             services.AddScoped<CustomerServices>();
 

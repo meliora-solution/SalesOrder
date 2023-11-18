@@ -43,10 +43,8 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                              });
 
                 var data = await query.ToListAsync();
+
                 return data.AsQueryable();
-
-
-
 
 
             }
@@ -56,27 +54,27 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return null;
             }
         }
-  public async Task<bool> UpsertCustomerAsync(CustomerDto objdto)
-    {
-        try
+        public async Task<bool> UpsertCustomerAsync(CustomerDto objdto)
         {
-           
+            try
+            {
 
-            return true;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return false;
+            }
         }
-        catch (Exception ex)
-        {
-            string msg = ex.Message;
-            return false;
-        }
-    }
         public async Task<CustomerDto?> GetCustomerAsync(int Id)
         {
             try
             {
 
                 return null;
-           
+
             }
             catch (Exception ex)
             {
@@ -90,7 +88,7 @@ namespace ServiceLayer.EF.CustomerService.Concrete
             try
             {
                 return false;
-                
+
             }
             catch (Exception ex)
             {
@@ -102,7 +100,7 @@ namespace ServiceLayer.EF.CustomerService.Concrete
 
     }
 
-  
+
 
 
 }
