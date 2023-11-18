@@ -30,7 +30,6 @@ namespace ServiceLayer.EF.CustomerService.Concrete
         {
             try
             {
-
                 var query = (from c in _context.Customers
                              select new CustomerDto
                              {
