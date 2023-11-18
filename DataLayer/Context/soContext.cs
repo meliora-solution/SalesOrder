@@ -12,19 +12,33 @@ namespace Server.DataLayer.Context
         public soContext()
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // You dont need this >> we configured it in program.cs
+            if (!optionsBuilder.IsConfigured)
+            {
+               // optionsBuilder.UseSqlServer("server=\\SQLinstanceName;database=SalesOrder;trusted_connection=true");
+            }
+        }
 
+        /*  
+        When you declare a property as virtual in an Entity Framework Core entity class, 
+        it enables lazy loading for that navigation property.Lazy loading is a feature that allows related data to be loaded from 
+        the database only when it is accessed for the first time.This can be beneficial in certain scenarios 
+        to optimize performance and minimize the amount of data loaded initially.
+        
+        public virtual DbSet<Customer> Customer{ get; set; } = null!;
+        
+        ServiceLayer.EF needs DBSet but ServiceLayer.Dapper does not need them.
+
+         */
         public virtual DbSet<Customer> Customers { get; set; } = null!;
         public virtual DbSet<Order> Orders { get; set; } = null!;
         public virtual DbSet<OrderItem> OrderItems { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-            }
-        }
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -145,9 +159,8 @@ namespace Server.DataLayer.Context
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     }
-
-}
-
+    
+ }
+    
 

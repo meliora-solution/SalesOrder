@@ -1,6 +1,6 @@
 ﻿namespace DataLayer.Entity
 {
-    public class Product
+    public partial class Product
     {
         public Product()
         {

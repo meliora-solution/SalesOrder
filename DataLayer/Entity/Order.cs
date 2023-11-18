@@ -16,5 +16,4 @@
         public virtual Customer Customer { get; set; } = null!;
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
-
 }
