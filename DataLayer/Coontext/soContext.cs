@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataLayer.Entity;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace Server.DataLayer.Context
@@ -8,9 +9,16 @@ namespace Server.DataLayer.Context
         public soContext(DbContextOptions<soContext> options) : base(options)
         {
         }
-     
+        public virtual DbSet<Customer> Customers { get; set; } = null!;
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+            }
+        }
     }
-    
- }
-    
+
+}
+
 

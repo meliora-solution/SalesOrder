@@ -7,9 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{4CA4CB35-5310-4009-A5F0-01A145568116}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer.Dapper", "Services.Dapper\ServiceLayer.Dapper.csproj", "{CA4D5DAF-4A60-44B7-A1D5-D81D467707FF}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayerEF", "ServiceLayerEF\ServiceLayerEF.csproj", "{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer.EF", "ServiceLayerEF\ServiceLayer.EF.csproj", "{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,10 +23,6 @@ Global
 		{4CA4CB35-5310-4009-A5F0-01A145568116}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4CA4CB35-5310-4009-A5F0-01A145568116}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4CA4CB35-5310-4009-A5F0-01A145568116}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA4D5DAF-4A60-44B7-A1D5-D81D467707FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA4D5DAF-4A60-44B7-A1D5-D81D467707FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA4D5DAF-4A60-44B7-A1D5-D81D467707FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA4D5DAF-4A60-44B7-A1D5-D81D467707FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}.Release|Any CPU.ActiveCfg = Release|Any CPU

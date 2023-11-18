@@ -1,12 +1,8 @@
 ﻿@page "/CustomerCreate"
-@using ServiceLayer.Dapper.CustomerService;
-@using ServiceLayer.Dapper.CustomerService.Concrete;
+
+
 
 <PageTitle>CreateCustomer</PageTitle>
-@inject CustomerServices _customerServices
-
-@inject IJSRuntime jsruntime
-@inject IDialogService _dialogService
 
 @if (IsLoading == true)
 {

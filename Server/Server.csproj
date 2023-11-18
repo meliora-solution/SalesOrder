@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Services.Dapper\ServiceLayer.Dapper.csproj" />
+	  <ProjectReference Include="..\ServiceLayerEF\ServiceLayer.EF.csproj" />
 	</ItemGroup>
 
 </Project>

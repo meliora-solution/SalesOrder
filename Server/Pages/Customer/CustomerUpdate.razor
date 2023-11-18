@@ -1,12 +1,9 @@
 ﻿@page "/CustomerUpdate/{Id:int}"
-@using ServiceLayer.Dapper.CustomerService.Concrete;
-@using ServiceLayer.Dapper.CustomerService;
+
+
 
 <PageTitle>ContactUpdate</PageTitle>
 
-@inject IJSRuntime jsruntime
-@inject CustomerServices _customerServices
-@inject IDialogService _dialogService
 
 @if (IsLoading == true)
 {

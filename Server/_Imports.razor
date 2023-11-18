@@ -9,3 +9,16 @@
 @using Server
 @using Server.Shared
 @using Microsoft.Fast.Components.FluentUI
+
+@using ServiceLayer.EF.CustomerService.Concrete;
+@using ServiceLayer.EF.CustomerService;
+
+
+@using global::DataLayer.Entity;
+
+
+
+@inject NavigationManager _navman
+@inject IJSRuntime jsruntime
+@inject CustomerServices _customerServices
+@inject IDialogService _dialogService

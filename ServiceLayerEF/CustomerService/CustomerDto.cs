@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ServiceLayer.Dapper.CustomerService
+namespace ServiceLayer.EF.CustomerService
 {
     public class CustomerDto
     {
