@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataLayer.Entity;
+using Microsoft.EntityFrameworkCore;
 using Server.DataLayer.Context;
 using System.Data;
 
@@ -8,25 +9,12 @@ namespace ServiceLayer.EF.CustomerService.Concrete
     {
         private readonly soContext _context;
 
-        /*
-
-        The line public CustomerServices(soContext context) is the constructor of the CustomerServices class. In this constructor, 
-        a parameter of type soContext named context is defined. This constructor is used for dependency injection, as it takes an instance of 
-        soContext as a parameter, allowing the caller to provide the necessary dependency (in this case, the soContext instance) when creating 
-        an instance of the CustomerServices class.
-
-        Dependency injection is a design pattern where the dependencies of a class are injected from the outside rather than being created within the class. 
-        This promotes better separation of concerns and makes the class more testable and modular.
-
-         */
-
         public CustomerServices(soContext context)
         {
             _context = context;
         }
 
-        // Menggunakan Entity Framework.
-        public async Task<IEnumerable<CustomerDto>?> GetCustomerListAsync()
+        public async Task<IEnumerable<CustomerDto>?> GetAllAsync()
         {
             try
             {
@@ -53,13 +41,30 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return null;
             }
         }
-        public async Task<bool> UpsertCustomerAsync(CustomerDto objdto)
+        public async Task<bool> UpdateAsync(CustomerDto objdto)
         {
+
             try
             {
+                var customer = await _context.Customers.FirstOrDefaultAsync(u => u.Id == objdto.Id);
 
+                if (customer != null)
+                {
+                    customer.FirstName = objdto.FirstName;
+                    customer.LastName = objdto.LastName;
+                    customer.City = objdto.City;
+                    customer.Country = objdto.Country;
+                    customer.Phone = objdto.Phone;
 
-                return true;
+                    var affectedRows = await _context.SaveChangesAsync();
+                    return affectedRows > 0;
+
+                }
+                else
+                {
+
+                    return false;
+                }
             }
             catch (Exception ex)
             {
@@ -67,12 +72,83 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return false;
             }
         }
-        public async Task<CustomerDto?> GetCustomerAsync(int Id)
+        public async Task<bool> Insertsync(CustomerDto objdto)
         {
+
             try
             {
 
-                return null;
+                var itemToAdd = new Customer
+                {
+
+                    FirstName = objdto.FirstName,
+                    LastName = objdto.LastName,
+                    City = objdto.City,
+                    Country = objdto.Country,
+                    Phone = objdto.Phone
+
+                };
+                _context.Add(itemToAdd);
+
+                var affectedRows = await _context.SaveChangesAsync();
+                return (affectedRows > 0);
+
+
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return false;
+            }
+        }
+        public async Task<bool> UpsertAsync(CustomerDto objdto)
+        {
+
+          
+            try
+            {
+                //if (objdto.Id == 0)
+                //{
+                //    result = await Insertsync(objdto);
+                //}
+                //else
+                //{
+                //    result = await UpdateAsync(objdto);
+                //}
+               
+               // this code is the sames as above > it is a shorter version.
+
+               bool result = (objdto.Id == 0) ? await Insertsync(objdto) : await UpdateAsync(objdto);
+               
+               return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                return false;
+            }
+        }
+        public async Task<CustomerDto?> GetByIdAsync(int Id)
+        {
+
+            try
+            {
+                var query = (from o in _context.Customers
+                             where o.Id == Id
+                             select new CustomerDto
+                             {
+                                 Id = o.Id,
+                                 FirstName = o.FirstName,
+                                 LastName = o.LastName,
+                                 Phone = o.Phone,
+                                 City = o.City,
+                                 Country = o.Country
+                             });
+
+                var data = query.SingleOrDefault();
+                return data;
 
             }
             catch (Exception ex)
@@ -84,10 +160,15 @@ namespace ServiceLayer.EF.CustomerService.Concrete
 
         public async Task<bool> DeleteAsync(int Id)
         {
+
             try
             {
-                return false;
+                var itemToDelete = await _context.Customers.FindAsync(Id);
+                _context.Customers.Remove(itemToDelete);
 
+                var affectedRows = await _context.SaveChangesAsync();
+
+                return (affectedRows > 0);
             }
             catch (Exception ex)
             {

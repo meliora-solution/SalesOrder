@@ -65,7 +65,7 @@
     private async Task Loading()
     {
         IsLoading = true;
-        customers = (await _customerServices.GetCustomerListAsync()).AsQueryable();      
+        customers = (await _customerServices.GetAllAsync()).AsQueryable();      
       
         IsLoading = false;
     }
