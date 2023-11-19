@@ -1,0 +1,28 @@
+﻿
+<div style="margin-left:10px">
+
+    <FluentGridItem xs="6">
+        <FluentGrid>
+            <FluentGridItem xs="2">
+                <FluentTextField Appearance="FluentInputAppearance.Outline" style="width: 100%;" @bind-Value="@search" Placeholder="Search" />
+            </FluentGridItem>
+            <FluentGridItem xs="1">
+                <FluentButton BackgroundColor="var(--inherit-bg)" Title="filter" OnClick="Filter">
+                    <FluentIcon Value="@(new Icons.Regular.Size24.Filter())" Color="Color.Neutral" Slot="start" />
+                </FluentButton>
+            </FluentGridItem>
+        </FluentGrid>
+
+    </FluentGridItem>
+    <br />
+</div>
+
+@code {
+    [Parameter] public EventCallback<string> OnFilter { get; set; }
+    private string search = string.Empty;
+
+    private async Task Filter()
+    {
+        await OnFilter.InvokeAsync(search);
+    }
+}

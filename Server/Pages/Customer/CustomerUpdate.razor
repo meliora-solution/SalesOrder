@@ -94,7 +94,7 @@
             base.OnInitialized();
 
             IsLoading = true;
-            model =  await _customerServices.GetByIdAsync(Id);
+            model =  await _customerServicesMapper.GetByIdAsync(Id);
     
             IsLoading = false;
         }
@@ -126,7 +126,7 @@
 
         
 
-            bool flg = await _customerServices.UpsertAsync(a);
+            bool flg = await _customerServicesMapper.UpsertAsync(a);
 
             IsLoading = false;
             // berikan pesan

@@ -19,6 +19,7 @@ builder.Services.AddFluentUIComponents();
 // Register Services
 
 builder.Services.AddEFService();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();

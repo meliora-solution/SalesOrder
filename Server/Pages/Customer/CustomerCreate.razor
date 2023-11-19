@@ -108,7 +108,7 @@
 
                 };
             //ServiceResponseDTO<bool> result = new();
-            var result = await _customerServices.UpsertAsync (a);
+            var result = await _customerServicesMapper.UpsertAsync (a);
             IsLoading = false;
             // berikan pesan
 

@@ -8,7 +8,7 @@ namespace ServiceLayerEF.Extentions
         public static void AddEFService(this IServiceCollection services)
         {
             services.AddScoped<CustomerServices>();
-
+            services.AddScoped<CustomerServicesMapper>();
         }
     }
 }

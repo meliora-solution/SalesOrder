@@ -1,8 +1,6 @@
-﻿@page "/customerlist"
+﻿@page "/customerSearch"
 
-
-
-<PageTitle>Customer List</PageTitle>
+<PageTitle>Customer Search</PageTitle>
 
 
 
@@ -21,6 +19,8 @@
         <FluentSpacer />
         <FluentButton OnClick="@(() => New())" Appearance="Appearance.Accent">New</FluentButton>
     </FluentHeader>
+   
+    <Server.Component.Search OnFilter="Search" />
 
     <FluentDataGrid Items="@customers" ResizableColumns=true GridTemplateColumns="0.1fr 0.2fr 0.2fr 0.2fr 0.2fr 0.2fr"
                     style="height: 580px;overflow:auto;">
@@ -37,22 +37,29 @@
             <FluentButton IconStart="@(new Icons.Regular.Size20.Delete())" Appearance="Appearance.Filled" BackgroundColor="#ff531a" Color="var(--danger)" Title="Hapus" OnClick="@(() => Delete(context.Id))" />
         </TemplateColumn>
 
-     </FluentDataGrid>
+    </FluentDataGrid>
 }
 @code {
     private bool IsLoading { get; set; } = false;
     IQueryable<CustomerDto>? customers;
-
+    IQueryable<CustomerDto>? customersInit;
     bool? canceled;
+
+
+    private void Search(string filter)
+    {
+        customers = customersInit.Where(p => p.FirstName.ToLower().Contains(filter.ToLower()) || p.LastName.ToLower().Contains(filter.ToLower()));
+        StateHasChanged();
+    }
 
     protected override async Task OnInitializedAsync()
     {
         base.OnInitialized();
-    
+
 
         await Loading();
 
-     
+
     }
     private void New()
     {
@@ -65,7 +72,8 @@
     private async Task Loading()
     {
         IsLoading = true;
-        customers = (await _customerServicesMapper.GetAllAsync()).AsQueryable();
+        customersInit = (await _customerServicesMapper.GetAllAsync()).AsQueryable();
+        customers = customersInit;
 
         IsLoading = false;
     }
@@ -85,8 +93,8 @@
             }
 
             IsLoading = true;
-     
-            bool flg  = await _customerServicesMapper.DeleteByIdAsync(Id);
+
+            bool flg = await _customerServicesMapper.DeleteByIdAsync(Id);
 
             IsLoading = false;
 
@@ -98,7 +106,7 @@
             {
                 _dialogService.ShowWarning("Data tidak bisa dihapus", "Delete");
             }
-           
+
             await Loading();
             StateHasChanged();
         }

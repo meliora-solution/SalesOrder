@@ -2,41 +2,34 @@
 using DataLayer.Entity;
 using Microsoft.EntityFrameworkCore;
 using Server.DataLayer.Context;
-using System.Data;
 
 namespace ServiceLayer.EF.CustomerService.Concrete
 {
-    public class CustomerServices
+    public class CustomerServicesMapper
     {
         private readonly soContext _context;
+        private readonly IMapper _mapper;
 
-        public CustomerServices(soContext context)
+        public CustomerServicesMapper(soContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
-
-
 
         public async Task<IEnumerable<CustomerDto>?> GetAllAsync()
         {
             try
             {
-                var query = (from c in _context.Customers
-                             select new CustomerDto
-                             {
-                                 Id = c.Id,
-                                 FirstName = c.FirstName,
-                                 LastName = c.LastName,
-                                 City = c.City,
-                                 Country = c.Country,
-                                 Phone = c.Phone
-                             });
+                var query = _context.Customers;
 
                 var data = await query.ToListAsync();
 
-                return data.AsQueryable();
+                if (data != null && data.Any())
+                {
+                    return _mapper.Map<List<Customer>, List<CustomerDto>>(data).AsQueryable();
+                }
 
-
+                return Enumerable.Empty<CustomerDto>();
             }
             catch (Exception ex)
             {
@@ -44,33 +37,31 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return null;
             }
         }
+     
         public async Task<bool> UpdateAsync(CustomerDto objdto)
         {
-
             try
             {
                 var customer = await _context.Customers.FirstOrDefaultAsync(u => u.Id == objdto.Id);
 
                 if (customer != null)
                 {
-                    customer.FirstName = objdto.FirstName;
-                    customer.LastName = objdto.LastName;
-                    customer.City = objdto.City;
-                    customer.Country = objdto.Country;
-                    customer.Phone = objdto.Phone;
+                    // Use AutoMapper to map properties from objdto to customer
+                    _mapper.Map(objdto, customer);
 
+                    // Save changes to the database
                     var affectedRows = await _context.SaveChangesAsync();
+
+                    // Return true if at least one row is affected, indicating a successful update
                     return affectedRows > 0;
-
                 }
-                else
-                {
 
-                    return false;
-                }
+                // Customer with the specified ID not found
+                return false;
             }
             catch (Exception ex)
             {
+                // Handle exceptions (log or rethrow if needed)
                 string msg = ex.Message;
                 return false;
             }
@@ -80,23 +71,15 @@ namespace ServiceLayer.EF.CustomerService.Concrete
 
             try
             {
-
-                var itemToAdd = new Customer
+                var customer = await _context.Customers.FirstOrDefaultAsync(u => u.Id == objdto.Id);
+                if (customer != null)
                 {
-
-                    FirstName = objdto.FirstName,
-                    LastName = objdto.LastName,
-                    City = objdto.City,
-                    Country = objdto.Country,
-                    Phone = objdto.Phone
-
-                };
-                _context.Add(itemToAdd);
-
+                    return false;
+                }             
+                var obj = _mapper.Map<CustomerDto, Customer>(objdto);
+                var addedObj = _context.Customers.Add(obj);
                 var affectedRows = await _context.SaveChangesAsync();
                 return (affectedRows > 0);
-
-
             }
             catch (Exception ex)
             {
@@ -117,27 +100,23 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return false;
             }
         }
-      
-
         public async Task<CustomerDto?> GetByIdAsync(int Id)
         {
 
             try
             {
-                var query = (from o in _context.Customers
-                             where o.Id == Id
-                             select new CustomerDto
-                             {
-                                 Id = o.Id,
-                                 FirstName = o.FirstName,
-                                 LastName = o.LastName,
-                                 Phone = o.Phone,
-                                 City = o.City,
-                                 Country = o.Country
-                             });
 
-                var data = query.SingleOrDefault();
-                return data;
+                var ocust = await _context.Customers.FirstOrDefaultAsync(u => u.Id== Id);
+
+
+                if (ocust != null)
+                {
+                    return _mapper.Map<Customer, CustomerDto>(ocust);
+                }
+
+                return new CustomerDto();
+
+      
 
             }
             catch (Exception ex)
@@ -165,11 +144,5 @@ namespace ServiceLayer.EF.CustomerService.Concrete
                 return false;
             }
         }
-
-
     }
-
-
-
-
 }

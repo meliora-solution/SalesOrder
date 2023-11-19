@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{39C52DE1-B4CC-49A0-A8E3-8A3FC9B4075F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceLayer.EF", "ServiceLayerEF\ServiceLayer.EF.csproj", "{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer.EF", "ServiceLayerEF\ServiceLayer.EF.csproj", "{B2DBFFBA-B6A5-414A-B628-8BA00439CD72}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataLayer", "DataLayer\DataLayer.csproj", "{111DC694-7F1D-4A4E-B5EA-DA873ACCBCF3}"
 EndProject
